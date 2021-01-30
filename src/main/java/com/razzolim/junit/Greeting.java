@@ -4,7 +4,7 @@ package com.razzolim.junit;
  * Hello world!
  *
  */
-public class App {
+public class Greeting {
 
 	private static final String HELLO = "Hello";
 	private static final String WORLD = "World";
