@@ -6,6 +6,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * 
+ * @author Renan
+ *
+ *	@see <a href="https://junit.org/junit5/docs/current/user-guide/#writing-tests">JUnit DOC</a>
+ *
+ */
 class GreetingTest {
 	
 	private Greeting greeting;
