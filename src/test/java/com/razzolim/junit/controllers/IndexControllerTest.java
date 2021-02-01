@@ -2,12 +2,17 @@ package com.razzolim.junit.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
+
+import java.time.Duration;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class IndexControllerTest {
+class IndexControllerTest {
 
 	IndexController controller;
 
@@ -28,9 +33,26 @@ public class IndexControllerTest {
 		assertThrows(ValueNotFoundException.class,	() -> {
 			controller.oopsHandler();
 		});
-		
-//		assertTrue("notimplemented".equals(controller.oopsHandler()),
-//				() -> "this is some expensive message to build for my test");
+	}
+	
+//	@Disabled("Demo of timeout")
+	@Test
+	void testTimeOut() {
+		assertTimeout(Duration.ofMillis(1000), () -> {
+			Thread.sleep(5000);
+			
+			System.out.println("I got here");
+		});
+	}
+	
+//	@Disabled("Demo of timeout")
+	@Test
+	void testTimePrempt() {
+		assertTimeoutPreemptively(Duration.ofMillis(1000), () -> {
+			Thread.sleep(5000);
+			
+			System.out.println("lol");
+		});
 	}
 
 }
