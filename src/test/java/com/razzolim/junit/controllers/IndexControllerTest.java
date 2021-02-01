@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.time.Duration;
 
@@ -35,7 +36,7 @@ class IndexControllerTest {
 		});
 	}
 	
-//	@Disabled("Demo of timeout")
+	@Disabled("Demo of timeout")
 	@Test
 	void testTimeOut() {
 		assertTimeout(Duration.ofMillis(1000), () -> {
@@ -45,7 +46,7 @@ class IndexControllerTest {
 		});
 	}
 	
-//	@Disabled("Demo of timeout")
+	@Disabled("Demo of timeout")
 	@Test
 	void testTimePrempt() {
 		assertTimeoutPreemptively(Duration.ofMillis(1000), () -> {
@@ -53,6 +54,16 @@ class IndexControllerTest {
 			
 			System.out.println("lol");
 		});
+	}
+	
+	@Test
+	void testAssumptionTrue() {
+		assumeTrue("TESTE".equalsIgnoreCase(System.getenv("TESTE_RUNTIME")));
+	}
+	
+	@Test
+	void testAssumptionIsTrue() {
+		assumeTrue("TESTE".equalsIgnoreCase("TESTE"));
 	}
 
 }
