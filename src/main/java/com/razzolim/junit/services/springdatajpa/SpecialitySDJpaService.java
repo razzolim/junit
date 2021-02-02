@@ -5,10 +5,10 @@ import java.util.Set;
 
 import com.razzolim.junit.model.Speciality;
 import com.razzolim.junit.repositories.SpecialtyRepository;
-import com.razzolim.junit.services.SpecialtyService;
+import com.razzolim.junit.services.SpecialityService;
 
 
-public class SpecialitySDJpaService implements SpecialtyService {
+public class SpecialitySDJpaService implements SpecialityService {
 
     private final SpecialtyRepository specialtyRepository;
 

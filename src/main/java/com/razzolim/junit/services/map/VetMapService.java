@@ -4,14 +4,14 @@ import java.util.Set;
 
 import com.razzolim.junit.model.Speciality;
 import com.razzolim.junit.model.Vet;
-import com.razzolim.junit.services.SpecialtyService;
+import com.razzolim.junit.services.SpecialityService;
 import com.razzolim.junit.services.VetService;
 
 public class VetMapService extends AbstractMapService<Vet, Long> implements VetService {
 
-    private final SpecialtyService specialtyService;
+    private final SpecialityService specialtyService;
 
-    public VetMapService(SpecialtyService specialtyService) {
+    public VetMapService(SpecialityService specialtyService) {
         this.specialtyService = specialtyService;
     }
 
@@ -28,7 +28,7 @@ public class VetMapService extends AbstractMapService<Vet, Long> implements VetS
     @Override
     public Vet save(Vet object) {
 
-        if (object.getSpecialities().size() > 0){
+        if (object.getSpecialities() != null && object.getSpecialities().isEmpty()){
             object.getSpecialities().forEach(speciality -> {
                 if(speciality.getId() == null){
                     Speciality savedSpecialty = specialtyService.save(speciality);

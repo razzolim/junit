@@ -3,9 +3,9 @@ package com.razzolim.junit.services.map;
 import java.util.Set;
 
 import com.razzolim.junit.model.Speciality;
-import com.razzolim.junit.services.SpecialtyService;
+import com.razzolim.junit.services.SpecialityService;
 
-public class SpecialityMapService extends AbstractMapService<Speciality, Long> implements SpecialtyService {
+public class SpecialityMapService extends AbstractMapService<Speciality, Long> implements SpecialityService {
 
     @Override
     public Set<Speciality> findAll() {
