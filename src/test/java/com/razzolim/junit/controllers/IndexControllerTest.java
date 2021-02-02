@@ -1,5 +1,6 @@
 package com.razzolim.junit.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
@@ -31,6 +32,8 @@ class IndexControllerTest {
 	@Test
 	void index() {
 		assertEquals("index", controller.index());
+		
+		assertThat(controller.index()).isEqualTo("index");
 	}
 
 	@DisplayName(value = "Test exception")
