@@ -3,9 +3,11 @@ package com.razzolim.junit.model;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-public class OwnerTest {
+@Tag("model")
+class OwnerTest {
 	
 	@Test
 	void dependentAssertions() {
