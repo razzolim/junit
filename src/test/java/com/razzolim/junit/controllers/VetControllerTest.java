@@ -7,6 +7,7 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.razzolim.junit.ControllerTest;
 import com.razzolim.junit.fauxspring.Model;
 import com.razzolim.junit.fauxspring.ModelMapImpl;
 import com.razzolim.junit.model.Vet;
@@ -15,7 +16,7 @@ import com.razzolim.junit.services.VetService;
 import com.razzolim.junit.services.map.SpecialityMapService;
 import com.razzolim.junit.services.map.VetMapService;
 
-public class VetControllerTest {
+class VetControllerTest implements ControllerTest {
 	
 	VetService vetService;
 	SpecialityService specialityService;

@@ -3,11 +3,11 @@ package com.razzolim.junit.model;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-@Tag("model")
-class PersonTest {
+import com.razzolim.junit.ModelTest;
+
+class PersonTest implements ModelTest {
 	
 	@Test
 	void groupedAssertions() {
