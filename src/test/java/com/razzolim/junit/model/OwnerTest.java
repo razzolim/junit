@@ -3,12 +3,16 @@ package com.razzolim.junit.model;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.razzolim.junit.ModelTest;
@@ -65,5 +69,19 @@ class OwnerTest implements ModelTest {
 		// numLinesToSkip = 1 because there's a header line 
 		System.out.println(stateName + " = " + val1 + " : " + val2);
 	}
-
+	
+	@DisplayName("Method Provider Test")
+	@ParameterizedTest(name = "{displayName} - [{index}] {arguments}")
+	@MethodSource("getArgs")
+	void fromMethodTest(String stateName, int val1, int val2) {
+		System.out.println(stateName + " = " + val1 + " : " + val2);
+	}
+	
+	static Stream<Arguments> getArgs() {
+		return Stream.of(
+				Arguments.of("FL", 5, 1),
+				Arguments.of("OH", 2, 2),
+				Arguments.of("MI", 3, 5));
+	}
+	
 }
