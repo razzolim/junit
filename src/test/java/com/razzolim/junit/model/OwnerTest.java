@@ -9,12 +9,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.razzolim.junit.CustomArgsProvider;
 import com.razzolim.junit.ModelTest;
 
 class OwnerTest implements ModelTest {
@@ -82,6 +84,13 @@ class OwnerTest implements ModelTest {
 				Arguments.of("FL", 5, 1),
 				Arguments.of("OH", 2, 2),
 				Arguments.of("MI", 3, 5));
+	}
+	
+	@DisplayName("Custom Provider Test")
+	@ParameterizedTest(name = "{displayName} - [{index}] {arguments}")
+	@ArgumentsSource(CustomArgsProvider.class)
+	void fromCustomProviderTest(String stateName, int val1, int val2) {
+		System.out.println(stateName + " = " + val1 + " : " + val2);
 	}
 	
 }
