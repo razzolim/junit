@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.razzolim.junit.ModelTest;
@@ -33,6 +34,14 @@ class OwnerTest implements ModelTest {
 	@ValueSource(strings = {"Spring", "Framework", "Guru"})
 	void testValueSource(String val) {
 		System.out.println(val);
+	}
+	
+	@DisplayName("Enum Source Test")
+	@ParameterizedTest(name = "{displayName} - [{index}] {arguments}")
+	@EnumSource(OwnerType.class)
+	void enumtest(OwnerType ownerType) {
+		// iterates over the enumeration values (it's gonna be an individual test for each value)
+		System.out.println(ownerType);
 	}
 
 }
