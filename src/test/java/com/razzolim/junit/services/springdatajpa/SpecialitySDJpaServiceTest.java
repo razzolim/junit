@@ -1,10 +1,14 @@
 package com.razzolim.junit.services.springdatajpa;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +27,19 @@ class SpecialitySDJpaServiceTest {
 	
 	@InjectMocks
 	SpecialitySDJpaService service;
+	
+	@Test
+	void findByIdTest() {
+		Speciality speciality = new Speciality();
+		
+		when(specialityRepository.findById(1l)).thenReturn(Optional.of(speciality));
+		
+		Speciality foundSpeciality = service.findById(1l);
+		
+		assertThat(foundSpeciality).isNotNull();
+		
+		verify(specialityRepository).findById(1l);
+	}
 	
 	@Test
 	void deleteById() {
