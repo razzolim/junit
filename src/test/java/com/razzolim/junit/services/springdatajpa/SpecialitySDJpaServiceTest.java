@@ -1,9 +1,11 @@
 package com.razzolim.junit.services.springdatajpa;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willThrow;
 
 import java.util.Optional;
 
@@ -115,6 +117,35 @@ class SpecialitySDJpaServiceTest {
 		service.delete(new Speciality());
 		
 		// then
+		then(repository).should().delete(any());
+	}
+	
+	@Test
+	void testDoThrow() {
+		doThrow(new RuntimeException("boom")).when(repository).delete(any());
+		
+		assertThrows(RuntimeException.class, () -> repository.delete(new Speciality()));
+		
+		verify(repository).delete(any());
+	}
+	
+	@Test
+	void testFindByIdThrows() {
+		
+		given(repository.findById(1l)).willThrow(new RuntimeException("Boom"));
+		
+		assertThrows(RuntimeException.class, () -> service.findById(1l));
+		
+		then(repository).should().findById(1l);
+	}
+	
+	@Test
+	void testDeleteBDD() {
+		
+		willThrow(new RuntimeException("boom")).given(repository).delete(any());
+		
+		assertThrows(RuntimeException.class, () -> service.delete(new Speciality()));
+		
 		then(repository).should().delete(any());
 	}
 	
