@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -39,6 +40,9 @@ class OwnerControllerTest {
 
 	@Mock
 	OwnerService service;
+	
+	@Mock
+	Model model;
 
 	@InjectMocks
 	OwnerController controller;
@@ -72,16 +76,21 @@ class OwnerControllerTest {
 	}
 	
 	@Test
-	void processFindFormWildcardsFound() {
+	void processFindFormWildcardFound() {
 		// given
 		Owner owner = new Owner(1l, "Joe", "FindMe");
+		InOrder inOrder = inOrder(service, model);
 		
 		// when
-		String viewName = controller.processFindForm(owner, bindingRes, Mockito.mock(Model.class));
+		String viewName = controller.processFindForm(owner, bindingRes, model);
 		
 		// then
 		assertThat("%FindMe%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
 		assertThat("owners/ownersList").isEqualToIgnoringCase(viewName);
+		
+		// in order asserts
+		inOrder.verify(service).findAllByLastNameLike(anyString());
+		inOrder.verify(model).addAttribute(anyString(), anyList());
 	}
 	
 	@Test
