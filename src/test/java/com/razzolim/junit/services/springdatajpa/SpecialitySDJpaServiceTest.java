@@ -1,12 +1,7 @@
 package com.razzolim.junit.services.springdatajpa;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.atMost;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 
@@ -29,6 +24,17 @@ class SpecialitySDJpaServiceTest {
 	SpecialitySDJpaService service;
 	
 	@Test
+	void deleteByObjectTest() {
+		Speciality speciality = new Speciality();
+		
+		service.delete(speciality);
+		
+		verify(specialityRepository).delete(any(Speciality.class));
+		
+		
+	}
+	
+	@Test
 	void findByIdTest() {
 		Speciality speciality = new Speciality();
 		
@@ -38,7 +44,7 @@ class SpecialitySDJpaServiceTest {
 		
 		assertThat(foundSpeciality).isNotNull();
 		
-		verify(specialityRepository).findById(1l);
+		verify(specialityRepository).findById(anyLong());
 	}
 	
 	@Test
