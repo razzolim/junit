@@ -2,6 +2,8 @@ package com.razzolim.junit.services.springdatajpa;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 import java.util.Optional;
 
@@ -22,6 +24,22 @@ class SpecialitySDJpaServiceTest {
 	
 	@InjectMocks
 	SpecialitySDJpaService service;
+	
+	@Test
+	void findByIdBDDTest() {
+		
+		// given
+		Speciality speciality = new Speciality();
+		given(specialityRepository.findById(1l)).willReturn(Optional.of(speciality));
+		
+		// when
+		Speciality foundSpeciality = service.findById(1l);
+		
+		//then
+		assertThat(foundSpeciality).isNotNull();
+		then(specialityRepository).should(times(1)).findById(anyLong());
+		then(specialityRepository).shouldHaveNoMoreInteractions();
+	}
 	
 	@Test
 	void deleteByObjectTest() {
