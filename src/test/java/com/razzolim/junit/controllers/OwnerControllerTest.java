@@ -90,7 +90,8 @@ class OwnerControllerTest {
 		
 		// in order asserts
 		inOrder.verify(service).findAllByLastNameLike(anyString());
-		inOrder.verify(model).addAttribute(anyString(), anyList());
+		inOrder.verify(model, times(1)).addAttribute(anyString(), anyList());
+		verifyNoMoreInteractions(model);
 	}
 	
 	@Test
@@ -106,6 +107,7 @@ class OwnerControllerTest {
 		// then
 		assertThat("%Buck%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
 		assertThat("redirect:/owners/1").isEqualToIgnoringCase(viewName);
+		verifyZeroInteractions(model);
 	}
 	
 	@Test
@@ -116,9 +118,12 @@ class OwnerControllerTest {
 		// when
 		String viewName = controller.processFindForm(owner, bindingRes, null);
 		
+//		verifyNoMoreInteractions(service); not working
+		
 		// then
 		assertThat("%DontFindMe%").isEqualToIgnoringCase(stringArgumentCaptor.getValue());
 		assertThat("owners/findOwners").isEqualToIgnoringCase(viewName);
+		verifyNoMoreInteractions(model);
 	}
 
 	@Test
