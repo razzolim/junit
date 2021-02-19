@@ -1,13 +1,19 @@
 package guru.springframework.brewery.web.controllers;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import guru.springframework.brewery.services.BeerService;
+import guru.springframework.brewery.web.model.BeerDto;
+import guru.springframework.brewery.web.model.BeerPagedList;
+import guru.springframework.brewery.web.model.BeerStyleEnum;
+import org.junit.jupiter.api.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -16,55 +22,53 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.reset;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
-import guru.springframework.brewery.services.BeerService;
-import guru.springframework.brewery.web.model.BeerDto;
-import guru.springframework.brewery.web.model.BeerPagedList;
-import guru.springframework.brewery.web.model.BeerStyleEnum;
-
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(BeerController.class)
 class BeerControllerTest {
 
-	@Mock
+	@MockBean
 	BeerService beerService;
 
-	@InjectMocks
-	BeerController beerController;
-
+	@Autowired
 	MockMvc mockMvc;
 
 	BeerDto validBeer;
 
 	@BeforeEach
 	void setUp() {
-		validBeer = BeerDto.builder().id(UUID.randomUUID()).version(1)
-				.beerName("Beer1").beerStyle(BeerStyleEnum.PALE_ALE)
-				.price(new BigDecimal("12.99")).quantityOnHand(4)
-				.upc(123456789012L).createdDate(OffsetDateTime.now())
-				.lastModifiedDate(OffsetDateTime.now()).build();
+		validBeer = BeerDto.builder().id(UUID.randomUUID())
+				.version(1)
+				.beerName("Beer1")
+				.beerStyle(BeerStyleEnum.PALE_ALE)
+				.price(new BigDecimal("12.99"))
+				.quantityOnHand(4)
+				.upc(123456789012L)
+				.createdDate(OffsetDateTime.now())
+				.lastModifiedDate(OffsetDateTime.now())
+				.build();
 
-		mockMvc = MockMvcBuilders.standaloneSetup(beerController)
-				.setMessageConverters(jackson2HttpMessageConverter()).build();
+		/*
+		 * As we are no longer initializing the mock, this line can be removed.
+		 * Spring context is doing that for us.
+		 * 
+		 * mockMvc = MockMvcBuilders.standaloneSetup(beerController)
+		 * .setMessageConverters(jackson2HttpMessageConverter()).build();
+		 */
+	}
+
+	/**
+	 * mockito will reset the mock to avoid throwing exceptions.
+	 */
+	@AfterEach
+	void tearDown() {
+		reset(beerService);
 	}
 
 	@Test
@@ -74,6 +78,9 @@ class BeerControllerTest {
 				.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ");
 
 		given(beerService.findBeerById(any())).willReturn(validBeer);
+		
+		MvcResult re = mockMvc.perform(get("/api/v1/beer/" + validBeer.getId())).andReturn();
+		System.out.println(re.getResponse().getContentAsString());
 
 		mockMvc.perform(get("/api/v1/beer/" + validBeer.getId()))
 				.andExpect(jsonPath("$.id", is(validBeer.getId().toString())))
@@ -141,17 +148,16 @@ class BeerControllerTest {
 	 * 
 	 * @return
 	 */
-	public MappingJackson2HttpMessageConverter jackson2HttpMessageConverter() {
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
-				false);
-		objectMapper.configure(
-				SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS,
-				true);
-		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-
-		objectMapper.registerModule(new JavaTimeModule());
-		return new MappingJackson2HttpMessageConverter(objectMapper);
-	}
+	/*
+	 * public MappingJackson2HttpMessageConverter jackson2HttpMessageConverter()
+	 * { ObjectMapper objectMapper = new ObjectMapper();
+	 * objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,
+	 * false); objectMapper.configure(
+	 * SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, true);
+	 * objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+	 * 
+	 * objectMapper.registerModule(new JavaTimeModule()); return new
+	 * MappingJackson2HttpMessageConverter(objectMapper); }
+	 */
 
 }
