@@ -30,6 +30,7 @@ import static org.mockito.Mockito.reset;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Disabled
 @WebMvcTest(BeerController.class)
 class BeerControllerTest {
 
